@@ -283,7 +283,7 @@ const Admin = () => {
                     Add Property
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-2xl">
+                <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
                   <DialogHeader>
                     <DialogTitle>
                       {editingProperty ? 'Edit Property' : 'Add New Property'}
@@ -314,49 +314,15 @@ const Admin = () => {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="price">Price (Number)</Label>
-                        <Input
-                          id="price"
-                          type="number"
-                          value={formData.price}
-                          onChange={(e) => setFormData({...formData, price: e.target.value})}
-                          required
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="price_text">Price (Text)</Label>
-                        <Input
-                          id="price_text"
-                          value={formData.price_text}
-                          onChange={(e) => setFormData({...formData, price_text: e.target.value})}
-                          placeholder="e.g., Starting from 50L, Negotiable"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="bedrooms">Bedrooms</Label>
-                        <Input
-                          id="bedrooms"
-                          type="number"
-                          value={formData.bedrooms}
-                          onChange={(e) => setFormData({...formData, bedrooms: e.target.value})}
-                          required
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="area">Area (sq ft)</Label>
-                        <Input
-                          id="area"
-                          type="number"
-                          value={formData.area}
-                          onChange={(e) => setFormData({...formData, area: e.target.value})}
-                          required
-                        />
-                      </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="price_text">Price</Label>
+                      <Input
+                        id="price_text"
+                        value={formData.price_text}
+                        onChange={(e) => setFormData({...formData, price_text: e.target.value})}
+                        placeholder="e.g., Starting from 50L, Negotiable"
+                        required
+                      />
                     </div>
 
                     <BedroomTypesInput

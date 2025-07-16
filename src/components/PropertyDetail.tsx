@@ -3,7 +3,20 @@ import { ArrowLeft, Heart, Share2, MapPin, Bed, Bath, Square, MessageCircle } fr
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Property } from "./PropertyCard";
+interface Property {
+  id: string;
+  title: string;
+  location: string;
+  price: number;
+  price_text?: string;
+  propertyType?: string;
+  bedroom_types: Array<{type: string; sqft: number}>;
+  images: string[];
+  description: string;
+  amenities: string[];
+  whatsappNumber: string;
+  brochure_urls?: string[];
+}
 
 interface PropertyDetailProps {
   property: Property;
@@ -160,27 +173,28 @@ export const PropertyDetail = ({ property, onBack }: PropertyDetailProps) => {
                     </Badge>
                   </div>
 
-                  <div className="text-4xl font-bold text-primary">
-                    {formatPrice(property.price)}
-                  </div>
+                  {property.price_text && (
+                    <div className="text-4xl font-bold text-primary">
+                      {property.price_text}
+                    </div>
+                  )}
 
-                  <div className="flex items-center gap-6 text-muted-foreground">
-                    <div className="flex items-center">
-                      <Bed className="h-5 w-5 mr-2" />
-                      <span className="font-medium">{property.bedrooms}</span>
-                      <span className="ml-1">Bedrooms</span>
+                  {/* Bedroom Configurations */}
+                  {property.bedroom_types && property.bedroom_types.length > 0 && (
+                    <div className="space-y-2">
+                      <h3 className="font-semibold text-lg">Configurations</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {property.bedroom_types.map((config, index) => (
+                          <div key={index} className="flex items-center gap-2 p-3 bg-muted rounded-lg">
+                            <Bed className="h-5 w-5 text-primary" />
+                            <span className="font-medium">{config.type}</span>
+                            <span className="text-muted-foreground">•</span>
+                            <span className="font-medium">{config.sqft} sq ft</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                    <div className="flex items-center">
-                      <Bath className="h-5 w-5 mr-2" />
-                      <span className="font-medium">{property.bathrooms}</span>
-                      <span className="ml-1">Bathrooms</span>
-                    </div>
-                    <div className="flex items-center">
-                      <Square className="h-5 w-5 mr-2" />
-                      <span className="font-medium">{property.area}</span>
-                      <span className="ml-1">sq ft</span>
-                    </div>
-                  </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -195,19 +209,21 @@ export const PropertyDetail = ({ property, onBack }: PropertyDetailProps) => {
               </CardContent>
             </Card>
 
-            {/* Features */}
-            <Card>
-              <CardContent className="p-6">
-                <h2 className="text-xl font-semibold mb-4">Features & Amenities</h2>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {property.features.map((feature, index) => (
-                    <Badge key={index} variant="outline" className="justify-start p-2">
-                      {feature}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            {/* Amenities */}
+            {property.amenities && property.amenities.length > 0 && (
+              <Card>
+                <CardContent className="p-6">
+                  <h2 className="text-xl font-semibold mb-4">Amenities</h2>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    {property.amenities.map((amenity, index) => (
+                      <Badge key={index} variant="secondary" className="justify-start p-2 bg-muted text-muted-foreground">
+                        {amenity}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
 
           {/* Sidebar */}
@@ -226,11 +242,11 @@ export const PropertyDetail = ({ property, onBack }: PropertyDetailProps) => {
                     <MessageCircle className="h-5 w-5 mr-2" />
                     Contact for Site Visit
                   </Button>
-                  {property.features.length > 0 && property.features[0] && (
+                  {property.brochure_urls && property.brochure_urls.length > 0 && (
                     <Button
                       variant="outline"
                       size="lg"
-                      onClick={() => window.open(property.features[0], '_blank')}
+                      onClick={() => window.open(property.brochure_urls![0], '_blank')}
                       className="w-full"
                     >
                       View Brochure

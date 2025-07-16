@@ -9,13 +9,12 @@ export interface Property {
   title: string;
   location: string;
   price: number;
+  price_text?: string;
   propertyType: string;
-  bedrooms: number;
-  bathrooms: number;
-  area: number;
+  bedroom_types: Array<{type: string; sqft: number}>;
   images: string[];
   description: string;
-  features: string[];
+  amenities: string[];
   whatsappNumber: string;
 }
 
@@ -63,7 +62,7 @@ export const PropertyCard = ({ property, onClick }: PropertyCardProps) => {
           <img
             src={property.images[currentImageIndex]}
             alt={property.title}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
           />
           
           {/* Image Navigation */}
@@ -134,36 +133,33 @@ export const PropertyCard = ({ property, onClick }: PropertyCardProps) => {
             </div>
 
             {/* Price */}
-            <div className="text-2xl font-bold text-primary">
-              {formatPrice(property.price)}
-            </div>
+            {property.price_text && (
+              <div className="text-2xl font-bold text-primary">
+                {property.price_text}
+              </div>
+            )}
 
-            {/* Property Details */}
-            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-              <div className="flex items-center">
-                <Bed className="h-4 w-4 mr-1" />
-                {property.bedrooms}
+            {/* Bedroom Configurations */}
+            {property.bedroom_types && property.bedroom_types.length > 0 && (
+              <div className="space-y-1">
+                {property.bedroom_types.map((config, index) => (
+                  <div key={index} className="text-sm text-muted-foreground">
+                    {config.type} - {config.sqft} sq ft
+                  </div>
+                ))}
               </div>
-              <div className="flex items-center">
-                <Bath className="h-4 w-4 mr-1" />
-                {property.bathrooms}
-              </div>
-              <div className="flex items-center">
-                <Square className="h-4 w-4 mr-1" />
-                {property.area} sq ft
-              </div>
-            </div>
+            )}
 
-            {/* Features */}
+            {/* Amenities */}
             <div className="flex flex-wrap gap-1">
-              {property.features.slice(0, 2).map((feature, index) => (
-                <Badge key={index} variant="outline" className="text-xs">
-                  {feature}
+              {property.amenities.slice(0, 3).map((amenity, index) => (
+                <Badge key={index} variant="secondary" className="text-xs bg-muted text-muted-foreground">
+                  {amenity}
                 </Badge>
               ))}
-              {property.features.length > 2 && (
-                <Badge variant="outline" className="text-xs">
-                  +{property.features.length - 2} more
+              {property.amenities.length > 3 && (
+                <Badge variant="secondary" className="text-xs bg-muted text-muted-foreground">
+                  +{property.amenities.length - 3} more
                 </Badge>
               )}
             </div>

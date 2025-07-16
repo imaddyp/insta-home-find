@@ -57,15 +57,16 @@ const Index = () => {
         id: prop.id,
         title: prop.title,
         price: prop.price,
+        price_text: prop.price_text,
         location: prop.location,
-        bedrooms: prop.bedrooms,
-        bathrooms: 0, // Default since bathrooms removed
-        area: prop.area,
+        bedroom_types: Array.isArray(prop.bedroom_types) 
+          ? prop.bedroom_types.filter((bt: any) => bt && typeof bt === 'object' && bt.type && bt.sqft)
+          : [],
         description: prop.description || '',
         images: prop.image_urls && prop.image_urls.length > 0 ? prop.image_urls : ['/placeholder.svg'],
         whatsappNumber: prop.whatsapp_number,
         propertyType: 'House', // Default since we don't have this in DB yet
-        features: prop.brochure_urls && prop.brochure_urls.length > 0 ? prop.brochure_urls : [] // Use brochure URLs as features for now
+        amenities: prop.amenities || []
       }));
       
       setProperties(convertedProperties);
