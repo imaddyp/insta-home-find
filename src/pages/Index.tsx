@@ -12,13 +12,16 @@ interface DatabaseProperty {
   id: string;
   title: string;
   price: number;
+  price_text?: string;
   location: string;
   bedrooms: number;
-  bathrooms: number;
+  bedroom_types: Array<{type: string; sqft: number}>;
   area: number;
   description: string;
+  amenities: string[];
   whatsapp_number: string;
   image_urls: string[];
+  brochure_urls: string[];
   created_at: string;
   updated_at: string;
 }
@@ -50,19 +53,19 @@ const Index = () => {
       if (error) throw error;
       
       // Convert database properties to frontend format
-      const convertedProperties: Property[] = (data || []).map((prop: DatabaseProperty) => ({
+      const convertedProperties: Property[] = (data || []).map((prop: any) => ({
         id: prop.id,
         title: prop.title,
         price: prop.price,
         location: prop.location,
         bedrooms: prop.bedrooms,
-        bathrooms: prop.bathrooms,
+        bathrooms: 0, // Default since bathrooms removed
         area: prop.area,
         description: prop.description || '',
-        images: prop.image_urls.length > 0 ? prop.image_urls : ['/placeholder.svg'],
+        images: prop.image_urls && prop.image_urls.length > 0 ? prop.image_urls : ['/placeholder.svg'],
         whatsappNumber: prop.whatsapp_number,
         propertyType: 'House', // Default since we don't have this in DB yet
-        features: [] // Default empty features array
+        features: prop.brochure_urls && prop.brochure_urls.length > 0 ? prop.brochure_urls : [] // Use brochure URLs as features for now
       }));
       
       setProperties(convertedProperties);
@@ -119,40 +122,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <div className="relative h-96 md:h-[500px] bg-gradient-to-r from-primary/10 to-accent/10 overflow-hidden">
-        <img
-          src={heroImage}
-          alt="Real Estate Hero"
-          className="w-full h-full object-cover opacity-80"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-        <div className="absolute top-4 right-4">
-          <Button 
-            onClick={() => navigate('/auth')} 
-            variant="secondary"
-            size="sm"
-          >
-            <Settings className="h-4 w-4 mr-2" />
-            Admin
-          </Button>
-        </div>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center text-white space-y-4 px-4">
-            <h1 className="text-4xl md:text-6xl font-bold">
-              Find Your Dream Home
-            </h1>
-            <p className="text-xl md:text-2xl opacity-90">
-              Discover properties without the hassle
-            </p>
-            <div className="flex items-center justify-center gap-2 text-lg">
-              <Search className="h-5 w-5" />
-              <span>No registration required • Direct WhatsApp contact</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Search Bar */}
@@ -163,7 +132,7 @@ const Index = () => {
           <div className="flex items-center gap-2">
             <Home className="h-5 w-5 text-primary" />
             <h2 className="text-2xl font-semibold">
-              {filteredProperties.length} Properties Found
+              {filteredProperties.length} Properties Available
             </h2>
           </div>
           {filters.query && (

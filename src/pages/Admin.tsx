@@ -11,18 +11,23 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { User, Session } from '@supabase/supabase-js';
 import { Plus, Edit, Trash2, LogOut } from "lucide-react";
+import { BedroomTypesInput } from "@/components/BedroomTypesInput";
+import { AmenitiesInput } from "@/components/AmenitiesInput";
 
 interface Property {
   id: string;
   title: string;
   price: number;
+  price_text?: string;
   location: string;
   bedrooms: number;
-  bathrooms: number;
+  bedroom_types: Array<{type: string; sqft: number}>;
   area: number;
   description: string;
+  amenities: string[];
   whatsapp_number: string;
   image_urls: string[];
+  brochure_urls: string[];
   created_at: string;
   updated_at: string;
 }
@@ -40,13 +45,16 @@ const Admin = () => {
   const [formData, setFormData] = useState({
     title: '',
     price: '',
+    price_text: '',
     location: '',
     bedrooms: '',
-    bathrooms: '',
+    bedroom_types: [{ type: '', sqft: '' }],
     area: '',
     description: '',
+    amenities: [''],
     whatsapp_number: '',
-    image_urls: ''
+    image_urls: '',
+    brochure_urls: ''
   });
 
   useEffect(() => {
@@ -85,7 +93,27 @@ const Admin = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setProperties(data || []);
+      // Convert and type the data properly
+      const typedProperties: Property[] = (data || []).map((prop: any) => ({
+        id: prop.id,
+        title: prop.title,
+        price: prop.price,
+        price_text: prop.price_text || '',
+        location: prop.location,
+        bedrooms: prop.bedrooms,
+        bedroom_types: Array.isArray(prop.bedroom_types) 
+          ? prop.bedroom_types.filter((bt: any) => bt && typeof bt === 'object' && bt.type && bt.sqft)
+          : [],
+        area: prop.area,
+        description: prop.description || '',
+        amenities: Array.isArray(prop.amenities) ? prop.amenities : [],
+        whatsapp_number: prop.whatsapp_number,
+        image_urls: Array.isArray(prop.image_urls) ? prop.image_urls : [],
+        brochure_urls: Array.isArray(prop.brochure_urls) ? prop.brochure_urls : [],
+        created_at: prop.created_at,
+        updated_at: prop.updated_at
+      }));
+      setProperties(typedProperties);
     } catch (error) {
       toast({
         title: "Error",
@@ -106,13 +134,16 @@ const Admin = () => {
     setFormData({
       title: '',
       price: '',
+      price_text: '',
       location: '',
       bedrooms: '',
-      bathrooms: '',
+      bedroom_types: [{ type: '', sqft: '' }],
       area: '',
       description: '',
+      amenities: [''],
       whatsapp_number: '',
-      image_urls: ''
+      image_urls: '',
+      brochure_urls: ''
     });
     setEditingProperty(null);
   };
@@ -123,13 +154,16 @@ const Admin = () => {
       setFormData({
         title: property.title,
         price: property.price.toString(),
+        price_text: property.price_text || '',
         location: property.location,
         bedrooms: property.bedrooms.toString(),
-        bathrooms: property.bathrooms.toString(),
+        bedroom_types: property.bedroom_types.length > 0 ? property.bedroom_types.map(bt => ({ type: bt.type, sqft: bt.sqft.toString() })) : [{ type: '', sqft: '' }],
         area: property.area.toString(),
         description: property.description || '',
+        amenities: property.amenities.length > 0 ? property.amenities : [''],
         whatsapp_number: property.whatsapp_number,
-        image_urls: property.image_urls.join(', ')
+        image_urls: property.image_urls.join(', '),
+        brochure_urls: property.brochure_urls.join(', ')
       });
     } else {
       resetForm();
@@ -143,13 +177,16 @@ const Admin = () => {
     const propertyData = {
       title: formData.title,
       price: parseFloat(formData.price),
+      price_text: formData.price_text,
       location: formData.location,
       bedrooms: parseInt(formData.bedrooms),
-      bathrooms: parseInt(formData.bathrooms),
+      bedroom_types: formData.bedroom_types.filter(bt => bt.type && bt.sqft).map(bt => ({ type: bt.type, sqft: parseInt(bt.sqft) })),
       area: parseInt(formData.area),
       description: formData.description,
+      amenities: formData.amenities.filter(amenity => amenity.trim()),
       whatsapp_number: formData.whatsapp_number,
-      image_urls: formData.image_urls.split(',').map(url => url.trim()).filter(Boolean)
+      image_urls: formData.image_urls.split(',').map(url => url.trim()).filter(Boolean),
+      brochure_urls: formData.brochure_urls.split(',').map(url => url.trim()).filter(Boolean)
     };
 
     try {
@@ -267,7 +304,19 @@ const Admin = () => {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="price">Price</Label>
+                        <Label htmlFor="location">Location</Label>
+                        <Input
+                          id="location"
+                          value={formData.location}
+                          onChange={(e) => setFormData({...formData, location: e.target.value})}
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="price">Price (Number)</Label>
                         <Input
                           id="price"
                           type="number"
@@ -276,19 +325,18 @@ const Admin = () => {
                           required
                         />
                       </div>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="location">Location</Label>
-                      <Input
-                        id="location"
-                        value={formData.location}
-                        onChange={(e) => setFormData({...formData, location: e.target.value})}
-                        required
-                      />
+                      <div className="space-y-2">
+                        <Label htmlFor="price_text">Price (Text)</Label>
+                        <Input
+                          id="price_text"
+                          value={formData.price_text}
+                          onChange={(e) => setFormData({...formData, price_text: e.target.value})}
+                          placeholder="e.g., Starting from 50L, Negotiable"
+                        />
+                      </div>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="bedrooms">Bedrooms</Label>
                         <Input
@@ -296,16 +344,6 @@ const Admin = () => {
                           type="number"
                           value={formData.bedrooms}
                           onChange={(e) => setFormData({...formData, bedrooms: e.target.value})}
-                          required
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="bathrooms">Bathrooms</Label>
-                        <Input
-                          id="bathrooms"
-                          type="number"
-                          value={formData.bathrooms}
-                          onChange={(e) => setFormData({...formData, bathrooms: e.target.value})}
                           required
                         />
                       </div>
@@ -320,6 +358,11 @@ const Admin = () => {
                         />
                       </div>
                     </div>
+
+                    <BedroomTypesInput
+                      bedroomTypes={formData.bedroom_types}
+                      onChange={(bedroom_types) => setFormData({...formData, bedroom_types})}
+                    />
 
                     <div className="space-y-2">
                       <Label htmlFor="whatsapp_number">WhatsApp Number</Label>
@@ -343,6 +386,16 @@ const Admin = () => {
                     </div>
 
                     <div className="space-y-2">
+                      <Label htmlFor="brochure_urls">Brochure PDF URLs (comma separated)</Label>
+                      <Textarea
+                        id="brochure_urls"
+                        value={formData.brochure_urls}
+                        onChange={(e) => setFormData({...formData, brochure_urls: e.target.value})}
+                        placeholder="https://example.com/brochure1.pdf, https://example.com/brochure2.pdf"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
                       <Label htmlFor="description">Description</Label>
                       <Textarea
                         id="description"
@@ -350,6 +403,11 @@ const Admin = () => {
                         onChange={(e) => setFormData({...formData, description: e.target.value})}
                       />
                     </div>
+
+                    <AmenitiesInput
+                      amenities={formData.amenities}
+                      onChange={(amenities) => setFormData({...formData, amenities})}
+                    />
 
                     <DialogFooter>
                       <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
@@ -371,7 +429,7 @@ const Admin = () => {
                   <TableHead>Title</TableHead>
                   <TableHead>Location</TableHead>
                   <TableHead>Price</TableHead>
-                  <TableHead>Beds/Baths</TableHead>
+                  <TableHead>Bedrooms</TableHead>
                   <TableHead>WhatsApp</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
@@ -382,7 +440,7 @@ const Admin = () => {
                     <TableCell className="font-medium">{property.title}</TableCell>
                     <TableCell>{property.location}</TableCell>
                     <TableCell>${property.price.toLocaleString()}</TableCell>
-                    <TableCell>{property.bedrooms}/{property.bathrooms}</TableCell>
+                    <TableCell>{property.bedrooms}</TableCell>
                     <TableCell>{property.whatsapp_number}</TableCell>
                     <TableCell>
                       <div className="flex gap-2">

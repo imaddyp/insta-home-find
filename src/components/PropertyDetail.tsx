@@ -24,7 +24,7 @@ export const PropertyDetail = ({ property, onBack }: PropertyDetailProps) => {
   };
 
   const handleWhatsAppClick = () => {
-    const message = `Hi! I'm interested in this property: ${property.title} located in ${property.location}. Price: ${formatPrice(property.price)}. Could you please provide more details?`;
+    const message = `Hi! I'm interested in this property: ${property.title} located in ${property.location}. Price: ${formatPrice(property.price)}. Could you please provide more details for a site visit?`;
     const whatsappURL = `https://wa.me/${property.whatsappNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappURL, '_blank');
   };
@@ -216,15 +216,27 @@ export const PropertyDetail = ({ property, onBack }: PropertyDetailProps) => {
             <Card className="sticky top-24">
               <CardContent className="p-6">
                 <h3 className="text-xl font-semibold mb-4">Interested in this property?</h3>
-                <Button
-                  variant="whatsapp"
-                  size="lg"
-                  onClick={handleWhatsAppClick}
-                  className="w-full"
-                >
-                  <MessageCircle className="h-5 w-5 mr-2" />
-                  Chat on WhatsApp
-                </Button>
+                <div className="space-y-3">
+                  <Button
+                    variant="whatsapp"
+                    size="lg"
+                    onClick={handleWhatsAppClick}
+                    className="w-full"
+                  >
+                    <MessageCircle className="h-5 w-5 mr-2" />
+                    Contact for Site Visit
+                  </Button>
+                  {property.features.length > 0 && property.features[0] && (
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      onClick={() => window.open(property.features[0], '_blank')}
+                      className="w-full"
+                    >
+                      View Brochure
+                    </Button>
+                  )}
+                </div>
                 <p className="text-sm text-muted-foreground mt-3 text-center">
                   Get instant response from the property owner
                 </p>

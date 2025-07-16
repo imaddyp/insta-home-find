@@ -16,43 +16,52 @@ export type Database = {
     Tables: {
       properties: {
         Row: {
+          amenities: string[] | null
           area: number
-          bathrooms: number
+          bedroom_types: Json | null
           bedrooms: number
+          brochure_urls: string[] | null
           created_at: string
           description: string | null
           id: string
           image_urls: string[] | null
           location: string
           price: number
+          price_text: string | null
           title: string
           updated_at: string
           whatsapp_number: string
         }
         Insert: {
+          amenities?: string[] | null
           area: number
-          bathrooms: number
+          bedroom_types?: Json | null
           bedrooms: number
+          brochure_urls?: string[] | null
           created_at?: string
           description?: string | null
           id?: string
           image_urls?: string[] | null
           location: string
           price: number
+          price_text?: string | null
           title: string
           updated_at?: string
           whatsapp_number: string
         }
         Update: {
+          amenities?: string[] | null
           area?: number
-          bathrooms?: number
+          bedroom_types?: Json | null
           bedrooms?: number
+          brochure_urls?: string[] | null
           created_at?: string
           description?: string | null
           id?: string
           image_urls?: string[] | null
           location?: string
           price?: number
+          price_text?: string | null
           title?: string
           updated_at?: string
           whatsapp_number?: string
