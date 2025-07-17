@@ -95,7 +95,7 @@ export const PropertyDetail = ({ property, onBack }: PropertyDetailProps) => {
         {/* Image Carousel */}
         <Card className="overflow-hidden">
           <div className="relative">
-            <div className="h-96 md:h-[500px] bg-muted overflow-hidden">
+            <div className="aspect-square bg-muted overflow-hidden">
               <img
                 src={property.images[currentImageIndex]}
                 alt={property.title}
@@ -249,7 +249,7 @@ export const PropertyDetail = ({ property, onBack }: PropertyDetailProps) => {
                       onClick={() => window.open(property.brochure_urls![0], '_blank')}
                       className="w-full"
                     >
-                      View Brochure
+                      Download Brochure
                     </Button>
                   )}
                 </div>

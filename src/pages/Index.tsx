@@ -66,7 +66,8 @@ const Index = () => {
         images: prop.image_urls && prop.image_urls.length > 0 ? prop.image_urls : ['/placeholder.svg'],
         whatsappNumber: prop.whatsapp_number,
         propertyType: 'House', // Default since we don't have this in DB yet
-        amenities: prop.amenities || []
+        amenities: prop.amenities || [],
+        brochure_urls: prop.brochure_urls || []
       }));
       
       setProperties(convertedProperties);

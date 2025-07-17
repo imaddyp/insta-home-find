@@ -16,6 +16,7 @@ export interface Property {
   description: string;
   amenities: string[];
   whatsappNumber: string;
+  brochure_urls?: string[];
 }
 
 interface PropertyCardProps {
@@ -58,11 +59,11 @@ export const PropertyCard = ({ property, onClick }: PropertyCardProps) => {
     >
       <div className="relative">
         {/* Image Carousel */}
-        <div className="relative h-64 bg-muted overflow-hidden">
+        <div className="relative aspect-square bg-muted overflow-hidden">
           <img
             src={property.images[currentImageIndex]}
             alt={property.title}
-            className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
           
           {/* Image Navigation */}
