@@ -80,6 +80,17 @@ const Index = () => {
 
   // Filter properties based on search criteria
   const filteredProperties = useMemo(() => {
+    // Show all properties if no filters are applied
+    const hasActiveFilters = filters.query || 
+      (filters.propertyType && filters.propertyType !== "All") ||
+      (filters.location && filters.location !== "All") ||
+      filters.minPrice || 
+      filters.maxPrice;
+    
+    if (!hasActiveFilters) {
+      return properties;
+    }
+    
     return properties.filter((property) => {
       // Query filter (title, location, description)
       if (filters.query) {
@@ -104,7 +115,7 @@ const Index = () => {
 
       return true;
     });
-  }, [filters]);
+  }, [properties, filters]);
 
   const handleSearch = (newFilters: SearchFilters) => {
     setFilters(newFilters);

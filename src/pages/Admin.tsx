@@ -176,12 +176,12 @@ const Admin = () => {
     
     const propertyData = {
       title: formData.title,
-      price: parseFloat(formData.price),
+      price: 0, // Default price since we're using price_text
       price_text: formData.price_text,
       location: formData.location,
-      bedrooms: parseInt(formData.bedrooms),
+      bedrooms: formData.bedroom_types.length || 1, // Use bedroom types count or default to 1
       bedroom_types: formData.bedroom_types.filter(bt => bt.type && bt.sqft).map(bt => ({ type: bt.type, sqft: parseInt(bt.sqft) })),
-      area: parseInt(formData.area),
+      area: formData.bedroom_types.reduce((total, bt) => bt.sqft ? total + parseInt(bt.sqft) : total, 0) || 0, // Calculate total area from bedroom types
       description: formData.description,
       amenities: formData.amenities.filter(amenity => amenity.trim()),
       whatsapp_number: formData.whatsapp_number,
