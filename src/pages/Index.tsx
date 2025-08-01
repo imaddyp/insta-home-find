@@ -35,10 +35,6 @@ const Index = () => {
   const navigate = useNavigate();
   const [filters, setFilters] = useState<SearchFilters>({
     query: "",
-    propertyType: "All",
-    location: "All",
-    minPrice: "",
-    maxPrice: "",
   });
 
   useEffect(() => {
@@ -84,40 +80,14 @@ const Index = () => {
 
   // Filter properties based on search criteria
   const filteredProperties = useMemo(() => {
-    // Show all properties if no filters are applied
-    const hasActiveFilters = filters.query || 
-      (filters.propertyType && filters.propertyType !== "All") ||
-      (filters.location && filters.location !== "All") ||
-      filters.minPrice || 
-      filters.maxPrice;
-    
-    if (!hasActiveFilters) {
+    if (!filters.query) {
       return properties;
     }
     
     return properties.filter((property) => {
-      // Query filter (title, location, description)
-      if (filters.query) {
-        const query = filters.query.toLowerCase();
-        const searchText = `${property.title} ${property.location} ${property.description}`.toLowerCase();
-        if (!searchText.includes(query)) return false;
-      }
-
-      // Property type filter
-      if (filters.propertyType && filters.propertyType !== "All") {
-        if (property.propertyType !== filters.propertyType) return false;
-      }
-
-      // Location filter
-      if (filters.location && filters.location !== "All") {
-        if (!property.location.includes(filters.location)) return false;
-      }
-
-      // Price range filter
-      if (filters.minPrice && property.price < parseInt(filters.minPrice)) return false;
-      if (filters.maxPrice && property.price > parseInt(filters.maxPrice)) return false;
-
-      return true;
+      const query = filters.query.toLowerCase();
+      const searchText = `${property.title} ${property.location} ${property.description}`.toLowerCase();
+      return searchText.includes(query);
     });
   }, [properties, filters]);
 
