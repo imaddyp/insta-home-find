@@ -17,6 +17,8 @@ export interface Property {
   amenities: string[];
   whatsappNumber: string;
   brochure_urls?: string[];
+  googleMapsLink?: string;
+  youtubeVideoUrl?: string;
 }
 
 interface PropertyCardProps {
@@ -120,14 +122,14 @@ export const PropertyCard = ({ property, onClick }: PropertyCardProps) => {
         </div>
 
         {/* Content */}
-        <CardContent className="p-4">
-          <div className="space-y-3">
+        <CardContent className="p-2 md:p-4">
+          <div className="space-y-2 md:space-y-3">
             {/* Title and Location */}
             <div>
-              <h3 className="font-semibold text-lg text-foreground line-clamp-1">
+              <h3 className="font-semibold text-sm md:text-lg text-foreground line-clamp-1">
                 {property.title}
               </h3>
-              <div className="flex items-center text-muted-foreground text-sm mt-1">
+              <div className="flex items-center text-muted-foreground text-xs md:text-sm mt-1">
                 <MapPin className="h-3 w-3 mr-1" />
                 {property.location}
               </div>
@@ -135,7 +137,7 @@ export const PropertyCard = ({ property, onClick }: PropertyCardProps) => {
 
             {/* Price */}
             {property.price_text && (
-              <div className="text-2xl font-bold text-primary">
+              <div className="text-sm md:text-2xl font-bold text-primary">
                 {property.price_text}
               </div>
             )}
@@ -144,23 +146,23 @@ export const PropertyCard = ({ property, onClick }: PropertyCardProps) => {
             {property.bedroom_types && property.bedroom_types.length > 0 && (
               <div className="space-y-1">
                 {property.bedroom_types.map((config, index) => (
-                  <div key={index} className="text-sm text-muted-foreground">
-                    {config.type} - {config.sqft} sq ft
-                  </div>
+                  <Badge key={index} variant="outline" className="text-[10px] md:text-xs px-1 py-0">
+                    {config.type}: {config.sqft} sq.ft
+                  </Badge>
                 ))}
               </div>
             )}
 
             {/* Amenities */}
             <div className="flex flex-wrap gap-1">
-              {property.amenities.slice(0, 3).map((amenity, index) => (
-                <Badge key={index} variant="secondary" className="text-xs bg-muted text-muted-foreground">
+              {property.amenities.slice(0, 2).map((amenity, index) => (
+                <Badge key={index} variant="secondary" className="text-[10px] md:text-xs bg-muted text-muted-foreground px-1 py-0">
                   {amenity}
                 </Badge>
               ))}
-              {property.amenities.length > 3 && (
-                <Badge variant="secondary" className="text-xs bg-muted text-muted-foreground">
-                  +{property.amenities.length - 3} more
+              {property.amenities.length > 2 && (
+                <Badge variant="secondary" className="text-[10px] md:text-xs bg-muted text-muted-foreground px-1 py-0">
+                  +{property.amenities.length - 2} more
                 </Badge>
               )}
             </div>

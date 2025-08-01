@@ -28,6 +28,8 @@ interface Property {
   whatsapp_number: string;
   image_urls: string[];
   brochure_urls: string[];
+  google_maps_link?: string;
+  youtube_video_url?: string;
   created_at: string;
   updated_at: string;
 }
@@ -54,7 +56,9 @@ const Admin = () => {
     amenities: [''],
     whatsapp_number: '',
     image_urls: '',
-    brochure_urls: ''
+    brochure_urls: '',
+    google_maps_link: '',
+    youtube_video_url: ''
   });
 
   useEffect(() => {
@@ -143,7 +147,9 @@ const Admin = () => {
       amenities: [''],
       whatsapp_number: '',
       image_urls: '',
-      brochure_urls: ''
+      brochure_urls: '',
+      google_maps_link: '',
+      youtube_video_url: ''
     });
     setEditingProperty(null);
   };
@@ -163,7 +169,9 @@ const Admin = () => {
         amenities: property.amenities.length > 0 ? property.amenities : [''],
         whatsapp_number: property.whatsapp_number,
         image_urls: property.image_urls.join(', '),
-        brochure_urls: property.brochure_urls.join(', ')
+        brochure_urls: property.brochure_urls.join(', '),
+        google_maps_link: property.google_maps_link || '',
+        youtube_video_url: property.youtube_video_url || ''
       });
     } else {
       resetForm();
@@ -186,7 +194,9 @@ const Admin = () => {
       amenities: formData.amenities.filter(amenity => amenity.trim()),
       whatsapp_number: formData.whatsapp_number,
       image_urls: formData.image_urls.split(',').map(url => url.trim()).filter(Boolean),
-      brochure_urls: formData.brochure_urls.split(',').map(url => url.trim()).filter(Boolean)
+      brochure_urls: formData.brochure_urls.split(',').map(url => url.trim()).filter(Boolean),
+      google_maps_link: formData.google_maps_link || null,
+      youtube_video_url: formData.youtube_video_url || null
     };
 
     try {
@@ -374,6 +384,26 @@ const Admin = () => {
                       amenities={formData.amenities}
                       onChange={(amenities) => setFormData({...formData, amenities})}
                     />
+
+                    <div className="space-y-2">
+                      <Label htmlFor="google_maps_link">Google Maps Link</Label>
+                      <Input
+                        id="google_maps_link"
+                        value={formData.google_maps_link}
+                        onChange={(e) => setFormData({...formData, google_maps_link: e.target.value})}
+                        placeholder="https://maps.google.com/..."
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="youtube_video_url">YouTube Video URL</Label>
+                      <Input
+                        id="youtube_video_url"
+                        value={formData.youtube_video_url}
+                        onChange={(e) => setFormData({...formData, youtube_video_url: e.target.value})}
+                        placeholder="https://www.youtube.com/watch?v=..."
+                      />
+                    </div>
 
                     <DialogFooter>
                       <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>

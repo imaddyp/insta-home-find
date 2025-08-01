@@ -22,6 +22,8 @@ interface DatabaseProperty {
   whatsapp_number: string;
   image_urls: string[];
   brochure_urls: string[];
+  google_maps_link?: string;
+  youtube_video_url?: string;
   created_at: string;
   updated_at: string;
 }
@@ -67,7 +69,9 @@ const Index = () => {
         whatsappNumber: prop.whatsapp_number,
         propertyType: 'House', // Default since we don't have this in DB yet
         amenities: prop.amenities || [],
-        brochure_urls: prop.brochure_urls || []
+        brochure_urls: prop.brochure_urls || [],
+        googleMapsLink: prop.google_maps_link,
+        youtubeVideoUrl: prop.youtube_video_url
       }));
       
       setProperties(convertedProperties);
@@ -159,7 +163,7 @@ const Index = () => {
         {loading ? (
           <div className="text-center py-16">Loading properties...</div>
         ) : filteredProperties.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
             {filteredProperties.map((property) => (
               <PropertyCard
                 key={property.id}
