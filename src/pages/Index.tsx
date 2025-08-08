@@ -161,15 +161,6 @@ const Index = () => {
           </div>
         )}
 
-        {/* Footer */}
-        <div className="mt-16 py-8 border-t border-border text-center">
-          <div className="space-y-2">
-            <h3 className="text-lg font-semibold">Real Estate Discovery</h3>
-            <p className="text-muted-foreground">
-              Browse properties freely • No spam calls • Direct communication
-            </p>
-          </div>
-        </div>
       </div>
     </div>
   );
