@@ -111,6 +111,11 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-8">
+        <header className="mb-8 text-center">
+          <h1 className="text-3xl md:text-5xl font-bold tracking-tight">Ramita</h1>
+          <p className="mt-2 text-muted-foreground text-sm md:text-base">Discover without Disturbance</p>
+          <p className="mt-1 text-muted-foreground text-xs md:text-sm">No Phone number, No Data Leak, No Spam Calls</p>
+        </header>
         {/* Search Bar */}
         <SearchBar onSearch={handleSearch} />
 
