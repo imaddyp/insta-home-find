@@ -144,9 +144,9 @@ export const PropertyCard = ({ property, onClick }: PropertyCardProps) => {
 
             {/* Bedroom Configurations */}
             {property.bedroom_types && property.bedroom_types.length > 0 && (
-              <div className="space-y-1">
+              <div className="flex flex-wrap gap-1">
                 {property.bedroom_types.map((config, index) => (
-                  <Badge key={index} variant="outline" className="text-[10px] md:text-xs px-1 py-0">
+                  <Badge key={index} variant="secondary" className="text-xs md:text-sm px-2 py-1 bg-primary/10 text-primary border-primary/20">
                     {config.type}: {config.sqft} sq.ft
                   </Badge>
                 ))}
