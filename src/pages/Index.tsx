@@ -85,8 +85,37 @@ const Index = () => {
     }
     
     return properties.filter((property) => {
-      const query = filters.query.toLowerCase();
-      const searchText = `${property.title} ${property.location} ${property.description}`.toLowerCase();
+      const query = filters.query.toLowerCase().trim();
+      
+      // Extract bedroom types for searching
+      const bedroomTypeTexts = property.bedroom_types.map(bt => bt.type.toLowerCase()).join(' ');
+      
+      // Create comprehensive search text including all searchable fields
+      const searchText = `${property.title} ${property.location} ${property.description} ${bedroomTypeTexts}`.toLowerCase();
+      
+      // Handle combined searches like "1bhk in mumbai" or "2bhk pune"
+      const queryParts = query.split(/\s+(?:in|at|near)\s+/);
+      if (queryParts.length === 2) {
+        const [bedroomQuery, locationQuery] = queryParts;
+        const matchesBedroom = bedroomTypeTexts.includes(bedroomQuery) || 
+                              searchText.includes(bedroomQuery);
+        const matchesLocation = property.location.toLowerCase().includes(locationQuery);
+        return matchesBedroom && matchesLocation;
+      }
+      
+      // Handle bedroom configuration searches (1bhk, 2bhk, etc.)
+      if (query.match(/^\d+\s*b(hk|ed)/)) {
+        const bedroomMatch = query.match(/^(\d+)/);
+        if (bedroomMatch) {
+          const bedroomCount = bedroomMatch[1];
+          return bedroomTypeTexts.includes(`${bedroomCount} bed`) ||
+                 bedroomTypeTexts.includes(`${bedroomCount}bhk`) ||
+                 bedroomTypeTexts.includes(`${bedroomCount} bhk`) ||
+                 searchText.includes(query);
+        }
+      }
+      
+      // Default search across all fields
       return searchText.includes(query);
     });
   }, [properties, filters]);
