@@ -17,6 +17,7 @@ interface Property {
   googleMapsLink?: string;
   youtubeVideoUrl?: string;
   brochure_urls?: string[];
+  bedroom_types: Array<{type: string; sqft: number}>;
 }
 
 interface PropertyDetailProps {
@@ -182,6 +183,24 @@ export const PropertyDetail = ({ property, onBack }: PropertyDetailProps) => {
                   </div>
                 )}
               </div>
+
+              {property.bedroom_types && property.bedroom_types.length > 0 && (
+                <div>
+                  <h2 className="text-xl font-semibold mb-3">Configurations Available</h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {property.bedroom_types.map((config, index) => (
+                      <div key={index} className="bg-muted/50 rounded-lg p-4 border">
+                        <div className="text-lg font-semibold text-primary">
+                          {config.type}
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          {config.sqft} sq.ft
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {property.description && (
                 <div>
