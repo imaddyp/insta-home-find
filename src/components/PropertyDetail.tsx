@@ -38,18 +38,6 @@ export const PropertyDetail = ({ property, onBack }: PropertyDetailProps) => {
     return `₹${price.toLocaleString()}`;
   };
 
-  const handleWhatsAppClick = () => {
-    const message = `Hi! I'm interested in this property: ${property.title} located in ${property.location}. Could you please provide more details?`;
-    const whatsappUrl = `https://wa.me/${property.whatsappNumber}?text=${encodeURIComponent(message)}`;
-    const link = document.createElement('a');
-    link.href = whatsappUrl;
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
@@ -239,50 +227,44 @@ export const PropertyDetail = ({ property, onBack }: PropertyDetailProps) => {
               <div>
                 <h3 className="text-lg font-semibold mb-4">Interested in this property?</h3>
                 <div className="space-y-3">
-                  <Button
-                    onClick={handleWhatsAppClick}
+                  <a
+                    href={`https://wa.me/${property.whatsappNumber}?text=${encodeURIComponent(`Hi! I'm interested in this property: ${property.title} located in ${property.location}. Could you please provide more details?`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-full"
                   >
-                    <Phone className="mr-2 h-4 w-4" />
-                    Contact on WhatsApp
-                  </Button>
+                    <Button className="w-full">
+                      <Phone className="mr-2 h-4 w-4" />
+                      Contact on WhatsApp
+                    </Button>
+                  </a>
                   
                   {property.googleMapsLink && (
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        const link = document.createElement('a');
-                        link.href = property.googleMapsLink!;
-                        link.target = '_blank';
-                        link.rel = 'noopener noreferrer';
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                      }}
+                    <a
+                      href={property.googleMapsLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="w-full"
                     >
-                      <MapPin className="mr-2 h-4 w-4" />
-                      View on Google Maps
-                    </Button>
+                      <Button variant="outline" className="w-full">
+                        <MapPin className="mr-2 h-4 w-4" />
+                        View on Google Maps
+                      </Button>
+                    </a>
                   )}
 
                   {property.brochure_urls && property.brochure_urls.length > 0 && (
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        const link = document.createElement('a');
-                        link.href = property.brochure_urls![0];
-                        link.target = '_blank';
-                        link.rel = 'noopener noreferrer';
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                      }}
+                    <a
+                      href={property.brochure_urls[0]}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="w-full"
                     >
-                      <Download className="mr-2 h-4 w-4" />
-                      Download Brochure
-                    </Button>
+                      <Button variant="outline" className="w-full">
+                        <Download className="mr-2 h-4 w-4" />
+                        Download Brochure
+                      </Button>
+                    </a>
                   )}
                 </div>
               </div>
