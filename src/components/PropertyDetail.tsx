@@ -41,7 +41,13 @@ export const PropertyDetail = ({ property, onBack }: PropertyDetailProps) => {
   const handleWhatsAppClick = () => {
     const message = `Hi! I'm interested in this property: ${property.title} located in ${property.location}. Could you please provide more details?`;
     const whatsappUrl = `https://wa.me/${property.whatsappNumber}?text=${encodeURIComponent(message)}`;
-    window.location.href = whatsappUrl;
+    const link = document.createElement('a');
+    link.href = whatsappUrl;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const handleShare = () => {
@@ -244,7 +250,15 @@ export const PropertyDetail = ({ property, onBack }: PropertyDetailProps) => {
                   {property.googleMapsLink && (
                     <Button
                       variant="outline"
-                      onClick={() => window.location.href = property.googleMapsLink!}
+                      onClick={() => {
+                        const link = document.createElement('a');
+                        link.href = property.googleMapsLink!;
+                        link.target = '_blank';
+                        link.rel = 'noopener noreferrer';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                      }}
                       className="w-full"
                     >
                       <MapPin className="mr-2 h-4 w-4" />
@@ -255,7 +269,15 @@ export const PropertyDetail = ({ property, onBack }: PropertyDetailProps) => {
                   {property.brochure_urls && property.brochure_urls.length > 0 && (
                     <Button
                       variant="outline"
-                      onClick={() => window.location.href = property.brochure_urls![0]}
+                      onClick={() => {
+                        const link = document.createElement('a');
+                        link.href = property.brochure_urls![0];
+                        link.target = '_blank';
+                        link.rel = 'noopener noreferrer';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                      }}
                       className="w-full"
                     >
                       <Download className="mr-2 h-4 w-4" />
