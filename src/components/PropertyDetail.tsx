@@ -40,7 +40,8 @@ export const PropertyDetail = ({ property, onBack }: PropertyDetailProps) => {
 
   const handleWhatsAppClick = () => {
     const message = `Hi! I'm interested in this property: ${property.title} located in ${property.location}. Could you please provide more details?`;
-    window.open(`https://wa.me/${property.whatsappNumber}?text=${encodeURIComponent(message)}`, '_blank');
+    const whatsappUrl = `https://wa.me/${property.whatsappNumber}?text=${encodeURIComponent(message)}`;
+    window.location.href = whatsappUrl;
   };
 
   const handleShare = () => {
@@ -243,7 +244,7 @@ export const PropertyDetail = ({ property, onBack }: PropertyDetailProps) => {
                   {property.googleMapsLink && (
                     <Button
                       variant="outline"
-                      onClick={() => window.open(property.googleMapsLink, '_blank')}
+                      onClick={() => window.location.href = property.googleMapsLink!}
                       className="w-full"
                     >
                       <MapPin className="mr-2 h-4 w-4" />
@@ -254,7 +255,7 @@ export const PropertyDetail = ({ property, onBack }: PropertyDetailProps) => {
                   {property.brochure_urls && property.brochure_urls.length > 0 && (
                     <Button
                       variant="outline"
-                      onClick={() => window.open(property.brochure_urls![0], '_blank')}
+                      onClick={() => window.location.href = property.brochure_urls![0]}
                       className="w-full"
                     >
                       <Download className="mr-2 h-4 w-4" />
